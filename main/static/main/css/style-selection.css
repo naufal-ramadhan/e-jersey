@@ -1,0 +1,94 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: auto;
+    gap: 10px;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;  
+    margin-bottom: 10px;
+    background-color: aquamarine;
+    height: 60px;
+    font-size:x-large;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.title{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.content{
+    display: flex;
+    flex-grow: 1;
+    justify-items: center;
+    justify-content: center;
+}
+
+.selection-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 120px;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.selection{
+    position: relative;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 350px;
+    height: 437px;
+}
+
+
+
+.selection img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    object-fit: cover;
+    min-width: inherit;
+}
+
+.text-overlay {
+    display: flex;
+    flex-direction: column;
+    position: absolute; /* Allows overlapping */
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    font-size: xx-large;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.footer{
+    background-color: aquamarine;
+    margin-top: 10px;
+    padding: 10px;
+    height: 20px;
+}
