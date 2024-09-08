@@ -1,0 +1,15 @@
+@startuml
+actor User
+frame Browser
+component View
+database Model
+collections Template
+
+Browser  <---  User
+Browser -> View : HTTP Request (1)
+View -> Browser :  HTTP Responese (4)
+View -> Model   : Edit data (2)
+Model -> View   : Give requested data(5)
+View ---> Template : Populasi data  (3)
+Template ---> View : Give HTML (6)
+@enduml
