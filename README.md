@@ -9,6 +9,8 @@ Kelas   : D <br>
 ---
 #### 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
   * Saya mengimplementasi checklist di atas dengan mengikuti tutorial dan juga menyesuaikan dengan konteks produk saya. Jika ada beberapa hal yang perlu dilakukan tetapi belum ada di tutorial, saya menggali lebih dalam di Google, seperti _pass_ paramater pada view.
+<br>
+
 #### 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html. 
 <br>
 
