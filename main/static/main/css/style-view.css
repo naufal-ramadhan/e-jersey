@@ -103,6 +103,7 @@ a{
     height: auto;
     object-fit: cover;
     min-width: inherit;
+    border: solid black 2px;
 }
 
 .footer{
