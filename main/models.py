@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 
 # Create your models here.
-class Jersey(models.Model):
+class Product(models.Model):
      name = models.CharField(max_length=255)
      price = models.IntegerField()
      description = models.TextField()
@@ -16,4 +16,4 @@ class Jersey(models.Model):
      def save(self, *args, **kwargs):
           if not self.slug:
                self.slug = slugify(self.name)
-          super(Jersey, self).save(*args, **kwargs)
+          super(Product, self).save(*args, **kwargs)
