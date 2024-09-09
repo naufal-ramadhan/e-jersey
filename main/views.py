@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Jersey
+from .models import Product
 
 # Create your views here.
 def home(request):
@@ -9,8 +9,16 @@ def home(request):
 
     return render(request, "main.html", context)
 
+def dataDiri(request):
+    context = {
+        "nama" : "Muhammad Naufal Ramadhan",
+        "npm" : "2306241700",
+        "kelas" : "D",
+    }
+    return render(request, "dataDiri.html", context)
+
 def clubSelection(request):
-    jerseys = Jersey.objects.filter(type="club")
+    jerseys = Product.objects.filter(type="club")
     context = {
         "title" : "Selection",
         "type" : "Club Jersey",
@@ -19,7 +27,7 @@ def clubSelection(request):
     return render(request, "selection.html", context)
 
 def nationalSelection(request):
-    jerseys = Jersey.objects.filter(type="national")
+    jerseys = Product.objects.filter(type="national")
     context = {
         "title" : "Selection",
         "type" : "National Jersey",
@@ -28,7 +36,7 @@ def nationalSelection(request):
     return render(request, "selection.html", context)
 
 def viewJersey(request, type, slug):
-    jersey = Jersey.objects.get(slug=slug)
+    jersey = Product.objects.get(slug=slug)
     context = {
         "title" : "Jersey",
         "type" : "Jersey",
