@@ -1,29 +1,21 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-</head>
-<body>
-    <div class="header">
-        <div class="title" style="font-size: large; font-weight: bold;">E - Jersey</div>
-        <br>
-    </div>
-    <div class="content">
-        <div class="selection-container">
-            <div class="nama"> 
-                Nama : <br>{{ nama }}
-            </div>
-            <div class="npm">
-                NPM : <br>{{ npm }}
-            </div>
-            <div class="kelas">
-                Kelas : <br>PBP {{ kelas }}
-            </div>
+{% extends 'base.html' %}
+{% block content %}
+<div class="header">
+    <div class="title" style="font-size: large; font-weight: bold;">E - Jersey</div>
+    <br>
+</div>
+<div class="content">
+    <div class="selection-container">
+        <div class="nama"> 
+            Nama : <br>{{ nama }}
+        </div>
+        <div class="npm">
+            NPM : <br>{{ npm }}
+        </div>
+        <div class="kelas">
+            Kelas : <br>PBP {{ kelas }}
         </div>
     </div>
-    <div class="footer"></div>
-</body>
-</html>
+</div>
+<div class="footer"></div>
+{% endblock content %}
