@@ -37,3 +37,13 @@ Link Web : http://muhammad-naufal324-ejersey.pbp.cs.ui.ac.id/
   ```
      path('xml/<str:id>', views.show_xml_by_id, name='show_xml_by_id_url'),
   ```
+
+### Screenshot pada Postman
+# XML
+ ![XML](images/tugas03/xml.png)
+ # JSON
+ ![JSON](images/tugas03/json.png)
+ # XML_ID
+ ![XML_ID](images/tugas03/xml_id.png)
+ # JSON_ID
+ ![JSON_ID](images/tugas03/json_id.png)
