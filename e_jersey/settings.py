@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4%klloa#(ef0y!gr_v_djhy-7#j&s6^0_js42m*cp=v50l6gjn
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1","muhammad-naufal324-ejersey.pbp.cs.ui.ac.id"]
-
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://<URL PWS KAMU>", "https://<URL_PWS_KAMU>"]
 
 # Application definition
 
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'e_jersey.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

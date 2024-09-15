@@ -4,9 +4,10 @@ from . import views
 app_name = 'main'
 
 urlpatterns = [
-    path('home/', views.home, name='home'),
-    path('', views.dataDiri, name='datadiri'),
-    path('club/', views.clubSelection, name='club'),
-    path('national/', views.nationalSelection, name='national'),
-    path('<str:type>/<slug:slug>', views.viewJersey, name='view'),
+    path('', views.main_view, name='main_view_url'),
+    path('create-product/', views.create_product, name='create_product_url'),
+    path('xml/', views.show_xml, name='show_xml_url'),
+    path('json/', views.show_json, name='show_json_url'),
+    path('xml/<str:id>', views.show_xml_by_id, name='show_xml_by_id_url'),
+    path('json/<str:id>', views.show_json_by_id, name='show_json_by_id_url'),
 ]
