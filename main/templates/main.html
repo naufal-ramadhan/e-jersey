@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="header">
+    <div class="title" style="font-size: large; font-weight: bold;">E - Jersey</div>
+    <br>
+</div>
+<div class="content">
+    <div class="content-container">
+        <div class="nama"> 
+            Nama : <br>{{ nama }}
+        </div>
+        <div class="npm">
+            NPM : <br>{{ npm }}
+        </div>
+        <div class="kelas">
+            Kelas : <br>PBP {{ kelas }}
+        </div>
+
+        {% if not products %}
+        <p>Belum ada data Product pada E-Jersey</p>
+        {% else %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Club</th>
+            </tr>
+
+            {% for product in products %}
+            <tr>
+                <th>{{product.name}}</th>
+                <th>{{product.price}}</th>
+                <th>{{product.description}}</th>
+                <th>{{product.type}}</th>
+                <th>{{product.club}}</th> 
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <a href="{% url 'main:create_product_url' %}">
+            <button>Add new Product</button>
+        </a>
+    </div>
+</div>
+<div class="footer"></div>
+{% endblock content %}
