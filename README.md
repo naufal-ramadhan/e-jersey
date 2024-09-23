@@ -108,18 +108,20 @@ Tugas 3
  </summary>
   
  #### 1. Apa perbedaan antara HttpResponseRedirect() dan redirect()
-  * `HttpResponseRedirect()` berfungsi untuk me-redireksi browser ke URL lain, sama dengan `redirect()`, perbedaanya terletak pada parameter URL yang di-pass, untuk `HttpResponseRedirect()` URL yang di-pass harus dalam bentuk tradisional URL sedangkan pada `redirect()` kita dapat pass nama URL nya saja yang telah didefinisikan pada `urls.py`. Sebagai contoh :
-  ```
-  return HttpResponseRedirect('/main/home/')
-  ```
-  ```
-  return redirect('main:home')
-  ```
+  * `HttpResponseRedirect()` berfungsi untuk me-redireksi browser ke URL lain, sama dengan `redirect()`, perbedaanya terletak pada parameter URL yang di-pass, untuk `HttpResponseRedirect()` URL yang di-pass harus dalam bentuk tradisional URL sedangkan pada `redirect()` kita dapat pass nama URL nya saja yang telah didefinisikan pada `urls.py`. Sebagai contoh : <br>
+  
+    ```
+    return HttpResponseRedirect('/main/home/')
+    ```
+    ```
+    return redirect('main:home')
+    ```
  * Sebagai tambahan, `redirect()` adalah shortcut yang disediakan oleh django yang terdiri dari `HttpResponseRedirect()` + `reverse()`. Sehingga lebih singkat dan mudah untuk di baca.
    <br>
    
  #### 2. Jelaskan cara kerja penghubungan model Product dengan User!
-  * Pada kasus yang telah saya buat, saya menghubungkan Product dengan User pada models.py untuk model produk saya, dengan relasi `ForeignKey`, atay relasi _many to one_. dengan syntax sebagai berikut.
+  * Pada kasus yang telah saya buat, saya menghubungkan Product dengan User pada models.py untuk model produk saya, dengan relasi `ForeignKey`, atay relasi _many to one_. dengan syntax sebagai berikut. <br>
+  
     ```
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ```
@@ -129,14 +131,16 @@ Tugas 3
  #### 3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
  * Authentication adalah proses untuk otentikasi User, atau untuk verifikasi apakah user yang login memang benar adalah dia, kita dapat Authenticate user dengan cek ID dan Password yang diberikan match dengan yang ada di database.
  * Authorization adalah proses untuk menentukan akses level dari user tersebut, dengan contoh apakah user yang login memiliki akses izin untuk mengakses sebuah resource tertentu.
- * terdapat implementasi kedua konsep tersebut dalam django. Untuk Authentication digunakan ketika terdapat user yang ingin login ke dalam suatu website, yaitu pada form `AuthenticationForm` fungsi `login()`, `AuthenticationForm` adalah form bawaan django yang dibuat untuk memudahkan proses login pada projek django. dengan contoh:
+ * terdapat implementasi kedua konsep tersebut dalam django. Untuk Authentication digunakan ketika terdapat user yang ingin login ke dalam suatu website, yaitu pada form `AuthenticationForm` fungsi `login()`, `AuthenticationForm` adalah form bawaan django yang dibuat untuk memudahkan proses login pada projek django. dengan contoh: <br>
+ 
    ```
    form = AuthenticationForm(data=request.POST) # Inisiasi form untuk login
         if form.is_valid(): # Cek apakah form yang disubmit valid (apakah user berhasil ter-otentikasi)
             user = form.get_user() # Fetch user pada form yang disubmit
             login(request, user) # Log user pada website dengan memberi session.
    ```
-* untuk implementasi Authorization pada django, terdapat decorator `@permission_required` atau attribute `has_perm()`. Contoh:
+* untuk implementasi Authorization pada django, terdapat decorator `@permission_required` atau attribute `has_perm()`. Contoh: <br>
+
      ```
      @permission_required("foo.add_choice")
      add: user.has_perm('foo.add_bar')
@@ -160,7 +164,9 @@ Tugas 3
  ##### 1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
    Membuat view function untuk registrasi, login, dan logout pada views.py
    * Register <br>
-   Pada `views.py`
+   
+   Pada `views.py` <br>
+   
      ```
      def register(request):
        form = UserCreationForm() # Inisiasi Form registrasi
@@ -174,7 +180,8 @@ Tugas 3
        context = {'form':form} # Jika berupa get request, maka akan diberikan form registrasi kosong
        return render(request, 'register.html', context) # Return html yang sudah jadi
      ```
-      Menambahkan url untuk registrasi Pada `urls.py`
+      Menambahkan url untuk registrasi Pada `urls.py` <br>
+      
     
      ```
       path('register/', views.register, name='register'),
@@ -182,7 +189,9 @@ Tugas 3
       Menambahkan `register.html` untuk registrasi Pada folder template
     
    * Login <br>
-   Pada `views.py`
+   
+   Pada `views.py` <br>
+   
      ```
      def login_user(request):
        if request.method == 'POST': # Jika request yang diberikan ke server adalah post (ketika menekan tombol login)
@@ -198,7 +207,8 @@ Tugas 3
      context = {'form': form}
      return render(request, 'login.html', context)
      ```
-      Menambahkan url untuk registrasi Pada `urls.py`
+      Menambahkan url untuk registrasi Pada `urls.py` <br>
+      
     
      ```
       path('login/', views.login_user, name='login'),
@@ -206,7 +216,9 @@ Tugas 3
      Menambahkan `login.html` untuk registrasi Pada folder template
 
    * Logout <br>
-   Pada `views.py`
+   
+   Pada `views.py` <br>
+   
      ```
      def logout_user(request):
        logout(request) # Akan log out user yang terdapat pada request
@@ -221,16 +233,19 @@ Tugas 3
      ```
      
   ##### 2. Menghubungkan model Product dengan User.
-   * Pada `models.py` ditambahkan field baru untuk user. Seperti berikut.
+   * Pada `models.py` ditambahkan field baru untuk user. Seperti berikut. <br>
+   
      ```
      user = models.ForeignKey(User, on_delete=models.CASCADE)
      ```
-   * Kemudian jalakankan
+   * Kemudian jalakankan <br>
+   
      ```
      python manage.py makemigrations 
      ```
    * Akan diberikan warning untuk set field kosong pada produk yang telah dibuat sebelumnya, kita dapat set default pada models nya lansung dengan contoh menjadi nullable, tetapi karena pada tahap ini sudah terdapat user yang terdaftar pada database dengan userid=1, maka saya akan set produk yang telah terdaftar sebelumnya ke user dengan id = 1.
-   * Kemudian jalakan
+   * Kemudian jalakan <br>
+   
      ```
      python manage.py migrate
      ```
@@ -240,17 +255,20 @@ Tugas 3
   * Karena sudah tidak ada masalah pada database, saya menambahkan user dengan fungsi registrasi yang telah dibuat sebelumnya, dan menambahkan produk nya juga menggunakan fungsi yang telah dibuat sebelumnya pada tugas 2.
 
   #### 4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
-   * Untuk set cookie ketika login, saya menambahkan ini pada fungsi `login_user()` di `views.py`.
+   * Untuk set cookie ketika login, saya menambahkan ini pada fungsi `login_user()` di `views.py`. <br>
+   
      ```
      response.set_cookie('last_login', str(datetime.datetime.now()))
      ```
-   * kemudian pada fungsi `main_view` pada `views.py`, saya menambahkan decorator `@login_required` yang mewajibkan user untuk ter-logged in sebelum bisa akses ke laman utama. Dan mengubah key `name` dan menambahkan key `last_login` pada context, seperti berikut.
+   * kemudian pada fungsi `main_view` pada `views.py`, saya menambahkan decorator `@login_required` yang mewajibkan user untuk ter-logged in sebelum bisa akses ke laman utama. Dan mengubah key `name` dan menambahkan key `last_login` pada context, seperti berikut. <br>
+   
      ```
      "nama" : request.user.username
      "last_login": request.user.last_login,
      ```
    * Sehingga nama yang akan disisipkan pada html adalah nama yang user yang terlogged, dan mengambil last_login pada user yang terlogged in, saya menghindari mengambil dari COOKIES karena terdapat kejadian dimana cookies last_login telah terhapus tetapi user nya tidak ter-logged out. Karena User tidak ter-logged out maka user dapat memasuki laman main, karena pada context pada view main perlu cookies last_login dan cookies yang dibicarakan disini sudah terhapus, maka membuat key error pada laman tersebut, dan untuk logout usernya dan login ulang untuk set cookies nya lagi.  
-   * Dan yang terakhir menambahkan kode berikut pada `main.html`. Untuk menampilkan terakhir kali login.
+   * Dan yang terakhir menambahkan kode berikut pada `main.html`. Untuk menampilkan terakhir kali login. <br>
+   
      ```
      Sesi terakhir login: {{ last_login }}
      ```
