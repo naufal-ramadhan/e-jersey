@@ -167,7 +167,7 @@ Tugas 3
    
    Pada `views.py` <br>
    
-     ```
+
      def register(request):
        form = UserCreationForm() # Inisiasi Form registrasi
 
@@ -179,20 +179,20 @@ Tugas 3
              return redirect('main:login') # Di redireksi pada laman login
        context = {'form':form} # Jika berupa get request, maka akan diberikan form registrasi kosong
        return render(request, 'register.html', context) # Return html yang sudah jadi
-     ```
-      Menambahkan url untuk registrasi Pada `urls.py` <br>
+
+   Menambahkan url untuk registrasi Pada `urls.py` <br>
       
     
-     ```
+
       path('register/', views.register, name='register'),
-     ```
-      Menambahkan `register.html` untuk registrasi Pada folder template
+
+   Menambahkan `register.html` untuk registrasi Pada folder template
     
    * Login <br>
    
    Pada `views.py` <br>
    
-     ```
+
      def login_user(request):
        if request.method == 'POST': # Jika request yang diberikan ke server adalah post (ketika menekan tombol login)
          form = AuthenticationForm(data=request.POST) # akan dibuatkan form untuk otentikasi user
@@ -206,32 +206,31 @@ Tugas 3
          form = AuthenticationForm(request) # Akan memberikan form kosong
      context = {'form': form}
      return render(request, 'login.html', context)
-     ```
-      Menambahkan url untuk registrasi Pada `urls.py` <br>
+
+   Menambahkan url untuk registrasi Pada `urls.py` <br>
       
     
-     ```
+
       path('login/', views.login_user, name='login'),
-     ```
-     Menambahkan `login.html` untuk registrasi Pada folder template
+
+   Menambahkan `login.html` untuk registrasi Pada folder template
 
    * Logout <br>
    
    Pada `views.py` <br>
    
-     ```
+
      def logout_user(request):
        logout(request) # Akan log out user yang terdapat pada request
        response = HttpResponseRedirect(reverse('main:login')) # akan di redirect ke laman login
        response.delete_cookie('last_login') # menghapus last login cookie
        return response
-     ```
-      Menambahkan url untuk registrasi Pada `urls.py`
-    
-     ```
+
+  
+   Menambahkan url untuk registrasi Pada `urls.py`
+   
       path('logout/', views.logout_user, name='logout'),
-     ```
-     
+      
   ##### 2. Menghubungkan model Product dengan User.
    * Pada `models.py` ditambahkan field baru untuk user. Seperti berikut. <br>
    
