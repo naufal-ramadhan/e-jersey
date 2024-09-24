@@ -9,8 +9,11 @@ Link Web : http://muhammad-naufal324-ejersey.pbp.cs.ui.ac.id/
 <br>
 
 ---
-# Tugas 2
-
+<details>
+<summary>
+Tugas 2
+</summary>
+ 
 #### 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
  1) Langkah Pertama yaitu me-setup. Pertama, membuat repository baru di Github, kemudian Clone ke Local. Setelah inisialisasi github selesai, tambahkan gitignore dan lain-lain, di dalam dir git, saya inisiasi virtual environment untuk project tersebut, kemudian saya menginstall semua dependency yang diperlukan pada virtual environment nya, seperti django.
  2) Pada tahap ini, saya membuat project E-jersey saya dan membuat app dalam project tersebut bernama main, dengan menjalankan `django-admin startproject e_jersey .` untuk membuat project, dan `python manage.py startapp main` untuk membuat aplikasi bernama main.
@@ -51,7 +54,12 @@ Link Web : http://muhammad-naufal324-ejersey.pbp.cs.ui.ac.id/
 #### 5. Mengapa model pada Django disebut sebagai ORM?
   * ORM itu sendiri memiliki arti Object-Related-Mapping, atau sebuah teknik untuk me-_convert_ sebuah object menjadi object pada sistem lain. dan Models pada django dapat disebut sebagai ORM, karena django memiliki peran sebagai _interface_ diantara Object pada Python dengan table pada sql. Pada Django, kita tidak perlu ber-urusan dengan sql, kita bisa langsung add, update, delete database langsung dengan python.
 
-# Tugas 3
+</details>
+
+<details>
+<summary>
+Tugas 3
+</summary>
 
  #### 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
   * Karena pada platform, sekarang diperlukan sinkronisasi data secara _real-time_, selain itu biasanya pada sebuah platform semuanya terbagi-bagi dalam beberapa komponen. Contohnya ada _client-side_ dan _server-side_, semisal terdapat dua user yang sedang menggunakan platformnya, dan user pertama melakukan POST request dan kemudian user selanjutnya melakukan GET request, disini diperlukan _data delivery_ sehingga user kedua mendapatkan informasi yang terbaru. Data delivery memungkinkan komponen-komponen seperti _client-side_ dan _server-side_ untuk berkomunikasi sehingga data pada keduanya dapat sinkron secara _real-time_.
@@ -91,3 +99,177 @@ Link Web : http://muhammad-naufal324-ejersey.pbp.cs.ui.ac.id/
  ![XML_ID](images/tugas03/xml_id.png)
  # JSON_ID
  ![JSON_ID](images/tugas03/json_id.png)
+
+ </details>
+
+ <details>
+ <summary>
+  Tugas 4
+ </summary>
+  
+ #### 1. Apa perbedaan antara HttpResponseRedirect() dan redirect()
+  * `HttpResponseRedirect()` berfungsi untuk me-redireksi browser ke URL lain, sama dengan `redirect()`, perbedaanya terletak pada parameter URL yang di-pass, untuk `HttpResponseRedirect()` URL yang di-pass harus dalam bentuk tradisional URL sedangkan pada `redirect()` kita dapat pass nama URL nya saja yang telah didefinisikan pada `urls.py`. Sebagai contoh : <br>
+  
+    ```
+    return HttpResponseRedirect('/main/home/')
+    ```
+    ```
+    return redirect('main:home')
+    ```
+ * Sebagai tambahan, `redirect()` adalah shortcut yang disediakan oleh django yang terdiri dari `HttpResponseRedirect()` + `reverse()`. Sehingga lebih singkat dan mudah untuk di baca.
+   <br>
+   
+ #### 2. Jelaskan cara kerja penghubungan model Product dengan User!
+  * Pada kasus yang telah saya buat, saya menghubungkan Product dengan User pada models.py untuk model produk saya, dengan relasi `ForeignKey`, atay relasi _many to one_. dengan syntax sebagai berikut. <br>
+  
+    ```
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ```
+  * Dengan penggunaan `ForeignKey` disini, kita bilang bahwa Produk hanya bisa dimiliki oleh satu User saja, tetapi User dapat memiliki banyak Produk. Parameter `on_delete=models.CASCADE` disini berfungsi untuk mengonfigurasi tindakan jika User dihapus, maka semua produk yang di-map ke user tersebut akan ikut terhapus juga.
+    <br>
+    
+ #### 3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+ * Authentication adalah proses untuk otentikasi User, atau untuk verifikasi apakah user yang login memang benar adalah dia, kita dapat Authenticate user dengan cek ID dan Password yang diberikan match dengan yang ada di database.
+ * Authorization adalah proses untuk menentukan akses level dari user tersebut, dengan contoh apakah user yang login memiliki akses izin untuk mengakses sebuah resource tertentu.
+ * terdapat implementasi kedua konsep tersebut dalam django. Untuk Authentication digunakan ketika terdapat user yang ingin login ke dalam suatu website, yaitu pada form `AuthenticationForm` fungsi `login()`, `AuthenticationForm` adalah form bawaan django yang dibuat untuk memudahkan proses login pada projek django. dengan contoh: <br>
+ 
+   ```
+   form = AuthenticationForm(data=request.POST) # Inisiasi form untuk login
+        if form.is_valid(): # Cek apakah form yang disubmit valid (apakah user berhasil ter-otentikasi)
+            user = form.get_user() # Fetch user pada form yang disubmit
+            login(request, user) # Log user pada website dengan memberi session.
+   ```
+* untuk implementasi Authorization pada django, terdapat decorator `@permission_required` atau attribute `has_perm()`. Contoh: <br>
+
+     ```
+     @permission_required("foo.add_choice")
+     add: user.has_perm('foo.add_bar')
+     change: user.has_perm('foo.change_bar')
+     delete: user.has_perm('foo.delete_bar')
+     view: user.has_perm('foo.view_bar')
+     ```
+     <br>
+     
+ #### 4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+ * Django mengingat pengguna yang telah login menggunakan session. Saat pengguna login berhasil:
+    * Django membuat session ID yang unik untuk pengguna tersebut.
+    * Session ID ini disimpan di cookies pada browser pengguna.
+    * Setiap kali pengguna mengunjungi halaman baru, Django memeriksa session ID yang tersimpan di cookies dan mencocokkannya dengan session di server.
+    * Jika session ID valid, Django menganggap pengguna masih dalam status login.
+
+ * Fungsi lain dari Cookies bisa digunakan untuk menyimpan preferensi tertentu pada website, atau contoh langsungnya ketika kita menyimpan keranjang pada e-commerce tanpa perlu login, walaupun kita pindah laman, browser tetap tahu keranjang yang kita simpan. dengan menggunakan session id yang tersimpan pada cookies di browser.
+ * Tidak semua cookies aman digunakan, semisal kita menggunakan protokol HTTP dari pada HTTPS. Sehingga cookie yang tersimpan tidak ter-enkripsi, yang memungkinkan seseorang untuk melihat data-data yang tersimpan pada cookie tersebut.
+ 
+ #### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+ ##### 1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+   Membuat view function untuk registrasi, login, dan logout pada views.py
+   * Register <br>
+   
+   Pada `views.py` <br>
+   
+     ```
+     def register(request):
+       form = UserCreationForm() # Inisiasi Form registrasi
+
+       if request.method == "POST": # Jika user memberikan post request, atau saat menekan tombol submit
+         form = UserCreationForm(request.POST)
+         if form.is_valid(): # Cek apakah form yang disubmit valid
+             form.save() # Jika valid, user akan disimpan pada database.
+             messages.success(request, 'Your account has been successfully created!')
+             return redirect('main:login') # Di redireksi pada laman login
+       context = {'form':form} # Jika berupa get request, maka akan diberikan form registrasi kosong
+       return render(request, 'register.html', context) # Return html yang sudah jadi
+     ```
+      Menambahkan url untuk registrasi Pada `urls.py` <br>
+      
+    
+     ```
+      path('register/', views.register, name='register'),
+     ```
+      Menambahkan `register.html` untuk registrasi Pada folder template
+    
+   * Login <br>
+   
+   Pada `views.py` <br>
+   
+     ```
+     def login_user(request):
+       if request.method == 'POST': # Jika request yang diberikan ke server adalah post (ketika menekan tombol login)
+         form = AuthenticationForm(data=request.POST) # akan dibuatkan form untuk otentikasi user
+         if form.is_valid(): # Jika otentikasi berhasil
+             user = form.get_user() # Fetch user dari form
+             login(request, user) # me log user dan di set telah ter logged in
+             response = HttpResponseRedirect(reverse("main:main_view_url")) # memberikan reponse yang akan redireksi user ke laman utama
+             response.set_cookie('last_login', str(datetime.datetime.now())) # set last_login cookie
+             return response
+       else: # Jika get request
+         form = AuthenticationForm(request) # Akan memberikan form kosong
+     context = {'form': form}
+     return render(request, 'login.html', context)
+     ```
+      Menambahkan url untuk registrasi Pada `urls.py` <br>
+      
+    
+     ```
+      path('login/', views.login_user, name='login'),
+     ```
+     Menambahkan `login.html` untuk registrasi Pada folder template
+
+   * Logout <br>
+   
+   Pada `views.py` <br>
+   
+     ```
+     def logout_user(request):
+       logout(request) # Akan log out user yang terdapat pada request
+       response = HttpResponseRedirect(reverse('main:login')) # akan di redirect ke laman login
+       response.delete_cookie('last_login') # menghapus last login cookie
+       return response
+     ```
+      Menambahkan url untuk registrasi Pada `urls.py`
+    
+     ```
+      path('logout/', views.logout_user, name='logout'),
+     ```
+     
+  ##### 2. Menghubungkan model Product dengan User.
+   * Pada `models.py` ditambahkan field baru untuk user. Seperti berikut. <br>
+   
+     ```
+     user = models.ForeignKey(User, on_delete=models.CASCADE)
+     ```
+   * Kemudian jalakankan <br>
+   
+     ```
+     python manage.py makemigrations 
+     ```
+   * Akan diberikan warning untuk set field kosong pada produk yang telah dibuat sebelumnya, kita dapat set default pada models nya lansung dengan contoh menjadi nullable, tetapi karena pada tahap ini sudah terdapat user yang terdaftar pada database dengan userid=1, maka saya akan set produk yang telah terdaftar sebelumnya ke user dengan id = 1.
+   * Kemudian jalakan <br>
+   
+     ```
+     python manage.py migrate
+     ```
+     Maka Produk pada database telah memiliki field User.
+  
+  ##### 3. Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+  * Karena sudah tidak ada masalah pada database, saya menambahkan user dengan fungsi registrasi yang telah dibuat sebelumnya, dan menambahkan produk nya juga menggunakan fungsi yang telah dibuat sebelumnya pada tugas 2.
+
+  #### 4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
+   * Untuk set cookie ketika login, saya menambahkan ini pada fungsi `login_user()` di `views.py`. <br>
+   
+     ```
+     response.set_cookie('last_login', str(datetime.datetime.now()))
+     ```
+   * kemudian pada fungsi `main_view` pada `views.py`, saya menambahkan decorator `@login_required` yang mewajibkan user untuk ter-logged in sebelum bisa akses ke laman utama. Dan mengubah key `name` dan menambahkan key `last_login` pada context, seperti berikut. <br>
+   
+     ```
+     "nama" : request.user.username
+     "last_login": request.user.last_login,
+     ```
+   * Sehingga nama yang akan disisipkan pada html adalah nama yang user yang terlogged, dan mengambil last_login pada user yang terlogged in, saya menghindari mengambil dari COOKIES karena terdapat kejadian dimana cookies last_login telah terhapus tetapi user nya tidak ter-logged out. Karena User tidak ter-logged out maka user dapat memasuki laman main, karena pada context pada view main perlu cookies last_login dan cookies yang dibicarakan disini sudah terhapus, maka membuat key error pada laman tersebut, dan untuk logout usernya dan login ulang untuk set cookies nya lagi.  
+   * Dan yang terakhir menambahkan kode berikut pada `main.html`. Untuk menampilkan terakhir kali login. <br>
+   
+     ```
+     Sesi terakhir login: {{ last_login }}
+     ```
+ </details>
