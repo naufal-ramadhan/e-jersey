@@ -29,7 +29,7 @@ PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1","muhammad-naufal324-ejersey.pbp.cs.ui.ac.id"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://<URL PWS KAMU>", "https://<URL_PWS_KAMU>"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://http://muhammad-naufal324-ejersey.pbp.cs.ui.ac.id/", "https://http://muhammad-naufal324-ejersey.pbp.cs.ui.ac.id/"]
 
 # Application definition
 
