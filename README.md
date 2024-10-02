@@ -272,3 +272,81 @@ Tugas 3
      Sesi terakhir login: {{ last_login }}
      ```
  </details>
+
+ <details>
+ <summary>
+  Tugas 5
+ </summary>
+  
+ ##### 1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+  * Urutan prioritas CSS selector adalah pertama, css yang ada langsung didalam Tag nya (Inline), yang kedua adalah CSS yang menggunakan ID selector, yang ketiga adalah CSS yang menggunakan class, attribute, dan pseudo-class selector, yang keempat adalah CSS yang menggunakan selector element dan pseudo-element.
+ ##### 2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+ * Karena sekarang, penggunaan aplikasi web tidak terbatas hanya pada desktop, tetapi juga pada smartphone, begitu juga dengan ukuran-ukuran display pada monitor yang begitu beragam, maka diperlukan responsive design agar seluruh pengguna dengan ukuran variasi display yang berbeda-beda bisa mendapatkan experience yang terbaik.
+ * Contoh web yang sudah menerapkan responsive design : Scele
+ * Contoh web yang belum menerapkan responsive design : SiakNG
+ 
+ ##### 3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+ * Margin, border, dan padding adalah bagian dari model kotak (box model) dalam CSS yang digunakan untuk mengatur ruang di sekitar elemen HTML.
+   * Margin adalah bagian terluar, yang biasanya digunakan untuk menerapkan space antar element html
+     > pada tailwind `m-1` untuk set margin : 1px;
+   * Border adalah yang ditengah (antara padding dan margin), biasanya digunakan untuk menerapkan warna border pada suatu element
+     > pada tailwind `border-2` untuk set border-width: 2px;
+   * Padding adalah yang terdalam, digunakan untuk menerapkan space antara content container dengan border container.
+     > pada tailwind `p-2` untuk set padding: 2px;
+ ##### 4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+  * Flexbox adalah metode tata letak satu dimensi (satu arah) yang digunakan untuk mendistribusikan ruang antara item di dalam container, baik secara horizontal (row) maupun vertikal (column). Kelebihan dan Kegunaan dari flex box adalah kemampuannya yang bisa membuat child elementnya grow dan shrink sesukanya, sehingga sangat responsive
+jika kita me-resize ukuran display kita, element-elementnya akan mengikuti.
+  * Grid Layout adalah sistem tata letak dua dimensi yang memungkinkan pengaturan elemen dalam bentuk baris dan kolom. Kelebihannya kita bisa me-setting dengan fixed jumlah kolom dan row yang diinginkan walaupun content yang diberikan berantakan, walaupun tidak se-fleksibel flex box, grid tetap bisa mengikuti ukuran display dengan tools yang ada, contoh pada tailwind terdapat `sm:`, `lg:`, dan lain-lain.
+ #### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
+ ##### 1) Kustomisasi halaman login, register, dan tambah product semenarik mungkin.
+   * Saya menambahkan Style-style baru menggunakan tailwind pada element-elemtn di page tersebut. Memberikan warna-warna pada elementnya dan juga mengatur posisi-posisi element sedemikian rupa sehingga rapih dan bagus untuk dilihat.
+ ##### 2) Kustomisasi halaman daftar product menjadi lebih menarik dan responsive.
+   * Pada halaman main sama seperti page login, register, dan daftar product saya style dengan tailwind. Untuk responsive, saya gunakan beberapa syntax pada tailwind seperti `sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5` agar bisa responsive di ukuran display yang bervariasi.
+ ##### 3) Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
+   * kemudian jika user belom mendaftarkan produk akan menampilkan gambar yang menandakan produk masih kosong dengan tag if else berikut ` {% if not products %} `, jika belum ada akan menampilkan image `no-product.png`.
+<br>
+     
+     ```
+      {% if not products %}
+      <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+          <img src="{% static 'images/no-product.png' %}" alt="No Product" class="w-32 h-32 mb-4"/>
+          <p class="text-center text-gray-600 mt-4">No Product Registered.</p>
+      </div>
+     ```
+
+ ##### 4) Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card (tidak boleh sama persis dengan desain pada Tutorial!).
+ * jika sudah ada produk maka secara dinamis akan menampilkan produknya yang di wrap dalam sebuah `Card Product` pada `card_product.html` seperti berikut.
+ <br>
+ 
+   ```
+    {% else %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 w-full">
+        {% for product in products %}
+            <div class="flex">
+                {% include 'card_product.html' with product=product %}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+   ```
+ ##### 5) Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+  * dialam `card_product.html` saya tambahkan ini agar tiap produk yang ter-assign pada cardnya dapat di edit dan dihapus secara responsive.
+<br>
+
+   ```
+    <a href="{% url 'main:edit_product_url' product.pk %}">Edit Product</a>
+    <a href="{% url 'main:delete_product_url' product.pk %}">Delete Product</a>
+   ```
+    
+ ##### 6) Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+ * Disini saya membuat navbar nya di wrap pada html terpisah bernama `navbar.html`. dan di include pada page yang saya inginkan dengan menggunakan `{% include 'navbar.html' %}`. Agar `navbar.html` bisa secara responsive mengikut ukuran display, saya pisahkan pada seperti berikut,
+   ```
+   <UNTUK DESKTOP>
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    ...
+   <UNTUK MOBILE>
+   <div class="mobile-menu hidden md:hidden  px-4 w-full md:max-w-full">
+   ```
+   
+ </details>
+ 
