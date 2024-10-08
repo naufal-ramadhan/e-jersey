@@ -9,18 +9,22 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.db.utils import IntegrityError
+from django.utils.html import strip_tags
 
 
 # Create your views here.
 @login_required(login_url='/login')
 def main_view(request):
-    products = Product.objects.filter(user=request.user)
+
 
     context = {
         "nama" : request.user.username,
         "npm" : "2306241700",
         "kelas" : "D",
-        "products" : products,
+
         'last_login': request.user.last_login,
     }
     return render(request, "main.html", context)
@@ -29,11 +33,14 @@ def create_product(request):
     form = ProductForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":
-        product = form.save(commit=False)
-        product.user = request.user
-        product.save()
-        return redirect('main:main_view_url')
-    
+        try:
+            product = form.save(commit=False)
+            product.user = request.user
+            product.save()
+            return redirect('main:main_view_url')
+        except IntegrityError as e:
+            messages.error(request, "Product already exists!")
+            return redirect('main:main_view_url')
     context = {"form" : form}
     return render(request, "create_product.html", context)
 
@@ -60,6 +67,23 @@ def delete_product(request, id):
     # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:main_view_url'))
 
+###################################### AJAX ######################################
+@csrf_exempt
+@require_POST
+def add_product_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    description = strip_tags(request.POST.get("description"))
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
 
 def register(request):
     form = UserCreationForm()
@@ -94,11 +118,11 @@ def logout_user(request):
     return response
 
 def show_xml(request):
-    data = Product.objects.all()
+    data = Product.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = Product.objects.all()
+    data = Product.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):
