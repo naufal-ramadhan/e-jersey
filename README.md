@@ -349,4 +349,152 @@ jika kita me-resize ukuran display kita, element-elementnya akan mengikuti.
    ```
    
  </details>
- 
+ <details>
+ <summary> 
+  Tugas 6
+ </summary>
+  
+##### Pertanyaan 1. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web:**
+
+JavaScript memungkinkan interaktivitas dan responsivitas halaman web tanpa perlu melakukan reload. Dengan JavaScript, kita dapat melakukan manipulasi DOM, menjalankan AJAX requests untuk komunikasi asinkronus, dan memberikan pengalaman pengguna yang dinamis.
+
+
+##### 2. Jelaskan fungsi dari penggunaan await ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`:**
+
+`await` digunakan untuk menunggu hasil dari `fetch()` yang mengembalikan Promise. Dengan `await`, JavaScript akan menjeda eksekusi kode hingga data dari server diterima. Jika kita tidak menggunakan `await`, JavaScript akan melanjutkan eksekusi kode sebelum data selesai diambil, sehingga dapat menyebabkan error karena data belum siap.
+
+
+##### 3. Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX POST:**
+
+`csrf_exempt` digunakan untuk mengecualikan mekanisme CSRF protection pada sebuah view yang menerima POST request dari AJAX. AJAX request biasanya tidak menyertakan CSRF token secara otomatis, sehingga jika tidak di-exempt, permintaan `POST` akan ditolak oleh Django sebagai tindakan keamanan.
+
+
+##### 4. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja:**
+
+Frontend validation bisa dimanipulasi oleh pengguna yang berniat jahat, sehingga kita tetap membutuhkan backend validation untuk memastikan data yang diterima server adalah bersih dan aman. Ini membantu mencegah celah keamanan seperti XSS (Cross-Site Scripting) atau manipulasi data lainnya yang mungkin tidak bisa dihindari dengan pembersihan frontend saja. 
+
+#### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)
+##### 1. AJAX GET
+  Ubahlah kode cards data mood agar dapat mendukung AJAX GET.
+  Lakukan pengambilan data mood menggunakan AJAX GET. Pastikan bahwa data yang diambil hanyalah data milik pengguna yang logged-in
+  * Sekarang data produk tidak terpisah, tetapi terdapat di dalam tag scriptnya yang dapat mengubah DOM secara dinamis seperti berikut.
+    ```
+     const productEntries = await getProduct();
+     if (productEntries.length === 0) {
+      ...
+     } else {
+      ...
+     }
+    ```
+    dimana getProduct() adalah sebagai berikut.
+    ```
+       async function getProduct(){
+        return fetch("{% url 'main:show_json_url' %}").then((res) => res.json())
+       }
+    ```
+    Kemudian saya mengubah view show_json menjadi berikut.
+    ```
+    def show_json(request):
+     data = Product.objects.filter(user=request.user)
+     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    ```
+    Sehingga produk-produk yang muncul sudah terfilter sesuai dengan user yang terlogged
+ ##### AJAX POST
+ Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.
+ ```
+          <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-neutral-800 hover:bg-neutral-950 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+          Add New Product by AJAX
+        </button>
+ ```
+ berikut adalah function dari `showModal()`
+ ```
+    function showModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modal.classList.remove('hidden'); 
+      setTimeout(() => {
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
+      }, 50); 
+  }
+ ```
+ Buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data.
+ ```
+  def add_product_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    description = strip_tags(request.POST.get("description"))
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+ ```
+ Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat.
+ ```
+ path('create-product-ajax', views.add_product_ajax, name='add_product_ajax'),
+ ```
+ Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.
+ ```
+ function addProduct() {
+    fetch("{% url 'main:add_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productForm')),
+    })
+    .then(response => refreshProductEntries())
+
+    document.getElementById("productForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+    hideModal();
+
+    return false;
+  }
+ ```
+ Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar mood terbaru tanpa reload halaman utama secara keseluruhan.
+ ```
+   function addProduct() {
+    fetch("{% url 'main:add_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productForm')),
+    })
+    .then(response => refreshProductEntries())
+
+    document.getElementById("productForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+    hideModal();
+
+    return false;
+  }
+ ```
+Jika add product akan menjalankan function `refreshProductEntries()`. Dengan isinya sebagai berikut.
+```
+  async function refreshProductEntries() {
+    document.getElementById("product_cards").innerHTML = "";
+    document.getElementById("product_cards").className = "";
+    const productEntries = await getProduct();
+    let htmlString = "";
+    let classNameString = "";
+
+    if (productEntries.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/no-product.png' %}" alt="no-product" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">No Product Registered.</p>
+            </div>
+        `;
+    }
+    else {
+     ...
+    }
+    document.getElementById("product_cards").className = classNameString;
+    document.getElementById("product_cards").innerHTML = htmlString;
+```
+Refresh product entries akan secara dinamis mengedit DOM dari html client, dengan mengubah nilai dari `htmlString` dan `classNameString`, yang kemudian akan di set kembali pada html client, sehingga html client bisa berubah dengan natif JS tanpa perlu campur tangan dari server side.
+</details>
