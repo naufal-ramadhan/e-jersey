@@ -142,6 +142,11 @@
       return fetch("{% url 'main:show_json_url' %}").then((res) => res.json())
   }
 
+  async function test(){
+    const response = await fetch("{% url 'main:show_json_url' %}");
+    console.log(response.status)
+  }
+
   async function refreshProductEntries() {
     document.getElementById("product_cards").innerHTML = "";
     document.getElementById("product_cards").className = "";

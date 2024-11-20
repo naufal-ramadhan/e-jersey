@@ -16,4 +16,5 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('create-product-ajax', views.add_product_ajax, name='add_product_ajax'),
+    path('create-flutter/', views.create_jersey_flutter, name='create_mood_flutter'),
 ]

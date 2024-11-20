@@ -1,8 +1,9 @@
 import datetime
+import json
 from django.shortcuts import render, redirect
 from main.forms import  ProductForm
 from main.models import Product
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.core import serializers
 from django.contrib import messages
@@ -133,4 +134,22 @@ def show_json_by_id(request, id):
     data = Product.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@csrf_exempt
+def create_jersey_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_jersey = Product.objects.create(
+            user=request.user,
+            name=data["name"],
+            price=int(data["price"]),
+            description=data["description"],
+            type=data["type"]
+        )
+
+        new_jersey.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
 
